@@ -1,0 +1,46 @@
+.header {
+  background-color: var(--background-dark);
+  padding: 20px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  overflow: hidden;
+}
+.header form {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.header input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid var(--button-hover);
+  border-radius: 5px;
+  outline: none;
+}
+.header button {
+  padding: 10px 14px;
+  border: 1px solid var(--button-hover);
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  background-color: var(--light);
+  transition: background-color 0.3s ease;
+  text-shadow: 1px 1px 5px black;
+  outline: none;
+}
+.header button:hover {
+  background-color: var(--button-hover);
+}
+.toastMessage {
+  inset: 90px !important;
+}
+
+@media screen and (min-width: 768px) {
+  .header input,
+  .header button {
+    font-size: 18px;
+  }
+}

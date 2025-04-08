@@ -1,0 +1,16 @@
+.loadMore {
+  background-color: var(--button);
+  border: none;
+  color: #fff;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 5px black;
+  display: block;
+}
+.loadMore:hover {
+  background-color: var(--button-hover);
+}

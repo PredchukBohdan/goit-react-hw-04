@@ -1,0 +1,7 @@
+.imageWrapper img {
+  aspect-ratio: 3/2;
+  transition: transform 0.8s ease;
+}
+.imageWrapper img:hover {
+  transform: scale(1.1);
+}
