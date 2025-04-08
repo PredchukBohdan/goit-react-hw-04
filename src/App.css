@@ -5,6 +5,9 @@
   padding: 0 8px;
   margin: 0 auto;
 }
+.toastMessage {
+  inset: 90px !important;
+}
 @media (min-width: 375px) {
   .container {
     padding: 0 16px;

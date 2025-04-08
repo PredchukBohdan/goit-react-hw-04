@@ -9,12 +9,13 @@ const api = axios.create({
   },
 });
 
-export const fetchImagesData = async (query, page = 1) => {
+export const fetchImagesData = async (query, page, signal) => {
   const response = await api.get("/search/photos", {
     params: {
       query,
       page,
       per_page: 15,
+      signal,
     },
   });
   return response;

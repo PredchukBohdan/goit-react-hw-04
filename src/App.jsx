@@ -1,6 +1,6 @@
 import "./App.css";
 import { SearchBar } from "./components/SearchBar/SearchBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchImagesData } from "./images-api";
 import { ImageGallery } from "./components/ImageGallery/ImageGallery";
 import { ErrorMessage } from "./components/ErrorMessage/ErrorMessage";
@@ -9,7 +9,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import Modal from "react-modal";
 import { ImageModal } from "./components/ImageModal/ImageModal";
 
-const override = {
+const loaderStyles = {
   display: "block",
   margin: "0 auto",
   width: "fit-content",
@@ -28,40 +28,43 @@ function App() {
   const [totalPages, setTotalPages] = useState(0);
   const [noResults, setNoResults] = useState(false);
 
-  const handleSearch = async (value) => {
-    try {
-      setImages([]);
-      setError(false);
-      setLoading(true);
-      setNoResults(false);
-      setQuery(value);
-      setPage(1);
-      const response = await fetchImagesData(value, 1);
-      if (response.data.total === 0) {
-        setNoResults(true);
-      } else {
-        setImages(response.data.results);
-        setTotalPages(response.data.total_pages);
-      }
-    } catch (error) {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const abortController = new AbortController();
 
-  const handleLoadMore = async () => {
-    try {
-      setLoading(true);
-      const nextPage = page + 1;
-      const response = await fetchImagesData(query, nextPage);
-      setImages((prevImages) => [...prevImages, ...response.data.results]);
-      setPage(nextPage);
-    } catch (error) {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    if (!query) return;
+    const fetchImages = async () => {
+      try {
+        setLoading(true);
+        setError(false);
+        setTotalPages(0);
+        setNoResults(false);
+        const response = await fetchImagesData(
+          query,
+          page,
+          abortController.signal
+        );
+        if (response.data.total === 0) {
+          setNoResults(true);
+        } else {
+          setImages((prevImages) => [...prevImages, ...response.data.results]);
+          setTotalPages(response.data.total_pages);
+        }
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchImages();
+    return () => {
+      abortController.abort();
+    };
+  }, [query, page]);
+
+  const handleSearch = (value) => {
+    setQuery(value);
+    setImages([]);
+    setPage(1);
   };
   const openModal = (image) => {
     setSelectedImage(image);
@@ -91,14 +94,14 @@ function App() {
             color="#4d02b9"
             loading={loading}
             className="loader"
-            cssOverride={override}
+            cssOverride={loaderStyles}
             size={20}
             aria-label="Loading Spinner"
             data-testid="loader"
           />
         )}
         {images.length > 0 && page < totalPages && !loading && (
-          <LoadMoreBtn onClick={handleLoadMore} />
+          <LoadMoreBtn onClick={() => setPage(page + 1)} />
         )}
       </div>
       <ImageModal

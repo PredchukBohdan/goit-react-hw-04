@@ -1,5 +1,5 @@
 import s from "./SearchBar.module.css";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export const SearchBar = ({ onSubmits }) => {
   const handleSubmit = (e) => {
@@ -26,18 +26,6 @@ export const SearchBar = ({ onSubmits }) => {
         />
         <button type="submit">Search</button>
       </form>
-      <Toaster
-        containerClassName={s.toastMessage}
-        toastOptions={{
-          duration: 3000,
-          style: {
-            border: "1px solid #4d02b9",
-            padding: "16px",
-            color: "#000",
-            maxWidth: "500px",
-          },
-        }}
-      />
     </header>
   );
 };
